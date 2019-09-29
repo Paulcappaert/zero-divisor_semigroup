@@ -91,7 +91,8 @@ def get_semigroup(graph, zero):
 
     print(num_possibilites)
 
-    for _ in range(num_possibilites):
+    for i in range(num_possibilites):
+        print(f'test {i}')
         for i, key in enumerate(keys):
             if len(key) == 2:
                 a, b = key
