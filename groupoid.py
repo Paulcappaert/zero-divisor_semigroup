@@ -49,9 +49,10 @@ def print_caley_table(groupoid):
     ordered_elements = list(groupoid.elements)
     ordered_elements.sort()
     for a in ordered_elements:
-        print(f'{a}| ', end='')
+        print(f'{a}|\t', end='')
+    print()
     for a in ordered_elements:
         for b in ordered_elements:
             product = groupoid.get(a, b)
-            print(f'{product}, ', end='')
+            print(f'{product},\t', end='')
         print()

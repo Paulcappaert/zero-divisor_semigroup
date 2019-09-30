@@ -56,6 +56,7 @@ def possible_mappings(graph):
                     if hood.issubset(graph[z].union({z})):
                         mappings[edge].add(z)
                 if len(mappings[edge]) == 0:
+                    print(edge)
                     return None
 
         redundant.add(a)
@@ -63,7 +64,7 @@ def possible_mappings(graph):
     return mappings
 
 
-def get_semigroup(graph, zero):
+def get_semigroup(graph, zero, squares_can_be_zero=True):
     elements = list(graph)
     elements.append(zero)
     grpd = groupoid(elements)
@@ -74,9 +75,11 @@ def get_semigroup(graph, zero):
             grpd.upd(node1, node2, zero)
 
     mappings = possible_mappings(graph)
-    for key in mappings:
-        if len(key) == 1:
-            mappings[key].add(zero)
+
+    if squares_can_be_zero:
+        for key in mappings:
+            if len(key) == 1:
+                mappings[key].add(zero)
 
     num_possibilites = 1
     keys = tuple(mappings)
@@ -92,7 +95,6 @@ def get_semigroup(graph, zero):
     print(num_possibilites)
 
     for i in range(num_possibilites):
-        print(f'test {i}')
         for i, key in enumerate(keys):
             if len(key) == 2:
                 a, b = key

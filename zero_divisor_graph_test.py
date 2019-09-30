@@ -100,6 +100,15 @@ class TestPossibleSemigroups(unittest.TestCase):
         self.assertEqual(s.get(1, 3), 3)
         self.assertEqual(s.get(1, 5), 3)
 
+    def test_squareWithTwoEnds(self):
+        graph = graph_from_edges(
+            {(1, 2), (2, 3), (3, 4), (4, 1), (3, 5), (4, 6)})
+        s = get_semigroup(graph, 0)
+        self.assertIsNone(s)
+
+    def test_sixBipartiteGraph(self):
+        pass
+
 
 if __name__ == '__main__':
     unittest.main()
