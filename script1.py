@@ -1,8 +1,7 @@
 import time
-from zero_divisor_graph import graph_from_edges, get_semigroup
-from groupoid import print_caley_table
+from zero_divisor_graph import ZeroDivisorGraph as ZDG
 
-graph = graph_from_edges([
+graph = ZDG(
     ('a', 'b'),
     ('a', 'c'),
     ('b', 'e'),
@@ -12,11 +11,11 @@ graph = graph_from_edges([
     ('f', 'e'),
     ('g', 'd'),
     ('d', 'e'),
-])
+)
 
 start = time.time()
-s = get_semigroup(graph, 'z')
-print_caley_table(s)
+semigroups = graph.get_semigroups()
+print(len(semigroups))
 end = time.time()
 seconds = (end - start)
 print(seconds)

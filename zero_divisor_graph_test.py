@@ -1,50 +1,7 @@
 from zero_divisor_graph import (possible_mappings,
                                 graph_from_edges,
-                                get_semigroup)
-from zero_divisor_graph import MixedCounter as counter
+                                get_graph_semigroups)
 import unittest
-
-
-class TestMixedCounter(unittest.TestCase):
-
-    def setUp(self):
-        self.c1 = counter((3, 3, 2, 5))
-
-    def test_counter1(self):
-        self.c1.tick()
-        self.assertEqual(self.c1.get_val(0), 1)
-        self.assertEqual(self.c1.get_val(1), 0)
-        self.assertEqual(self.c1.get_val(2), 0)
-
-    def test_counter3(self):
-        for _ in range(3):
-            self.c1.tick()
-        self.assertEqual(self.c1.get_val(0), 0)
-        self.assertEqual(self.c1.get_val(1), 1)
-        self.assertEqual(self.c1.get_val(2), 0)
-
-    def test_counter12(self):
-        for _ in range(12):
-            self.c1.tick()
-        self.assertEqual(self.c1.get_val(0), 0)
-        self.assertEqual(self.c1.get_val(1), 1)
-        self.assertEqual(self.c1.get_val(2), 1)
-
-    def test_counterEnd(self):
-        for _ in range(89):
-            self.c1.tick()
-        self.assertEqual(self.c1.get_val(0), 2)
-        self.assertEqual(self.c1.get_val(1), 2)
-        self.assertEqual(self.c1.get_val(2), 1)
-        self.assertEqual(self.c1.get_val(3), 4)
-
-    def test_counterWrap(self):
-        for _ in range(90):
-            self.c1.tick()
-        self.assertEqual(self.c1.get_val(0), 0)
-        self.assertEqual(self.c1.get_val(1), 0)
-        self.assertEqual(self.c1.get_val(2), 0)
-        self.assertEqual(self.c1.get_val(3), 0)
 
 
 class TestPossibleMappings(unittest.TestCase):
@@ -81,30 +38,32 @@ class TestPossibleSemigroups(unittest.TestCase):
 
     def test_squareGraph(self):
         graph = graph_from_edges({(1, 2), (2, 3), (3, 4), (4, 1)})
-        s = get_semigroup(graph, 0)
-        self.assertIsNotNone(s)
+        semigroups = get_graph_semigroups(graph, 0)
+        self.assertNotEqual(len(semigroups), 0)
 
     def test_triangle(self):
         graph = graph_from_edges({(1, 2), (2, 3), (3, 1)})
-        s = get_semigroup(graph, 0)
-        self.assertIsNotNone(s)
-        self.assertIn(s.get(1, 1), {0, 1})
-        self.assertIn(s.get(2, 2), {0, 2})
-        self.assertIn(s.get(3, 3), {0, 3})
+        semigroups = get_graph_semigroups(graph, 0)
+        self.assertNotEqual(len(semigroups), 0)
+        for s in semigroups:
+            self.assertIn(s.get(1, 1), {0, 1, 2, 3})
+            self.assertIn(s.get(2, 2), {0, 1, 2, 3})
+            self.assertIn(s.get(3, 3), {0, 1, 2, 3})
 
     def test_squareWithOneEnd(self):
         graph = graph_from_edges(
             {(1, 2), (2, 3), (3, 4), (4, 1), (3, 5)})
-        s = get_semigroup(graph, 0)
-        self.assertIsNotNone(s)
-        self.assertEqual(s.get(1, 3), 3)
-        self.assertEqual(s.get(1, 5), 3)
+        semigroups = get_graph_semigroups(graph, 0)
+        self.assertNotEqual(len(semigroups), 0)
+        for s in semigroups:
+            self.assertEqual(s.get(1, 3), 3)
+            self.assertEqual(s.get(1, 5), 3)
 
     def test_squareWithTwoEnds(self):
         graph = graph_from_edges(
             {(1, 2), (2, 3), (3, 4), (4, 1), (3, 5), (4, 6)})
-        s = get_semigroup(graph, 0)
-        self.assertIsNone(s)
+        s = get_graph_semigroups(graph, 0)
+        self.assertEqual(len(s), 0)
 
     def test_sixBipartiteGraph(self):
         pass

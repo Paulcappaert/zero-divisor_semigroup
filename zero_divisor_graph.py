@@ -1,30 +1,31 @@
-from groupoid import CommutativeGroupoid as groupoid
-from groupoid import is_assoc
+from groupoid import Groupoid as groid
+from semigroup import get_semigroups
 
 
-class MixedCounter():
+class ZeroDivisorGraph():
 
-    def __init__(self, mods):
-        self.mods = tuple(mods)
-        self.nums = [0] * len(self.mods)
+    def __init__(self, *edges, zero=0):
+        self.graph = graph_from_edges(edges)
+        self.zero = zero
 
-    def tick(self):
-        carry = 1
-        i = 0
-        while carry > 0:
-            self.nums[i] += 1
-            if self.nums[i] % self.mods[i] == 0:
-                self.nums[i] = 0
-                carry = 1
+    def is_sufficient(self):
+        mappings = possible_mappings(self.graph)
+        if mappings:
+            return True
+        return False
+
+    def get_semigroups(self):
+        return get_graph_semigroups(self.graph, zero=self.zero)
+
+    def print_poss_maps(self):
+        poss_maps = possible_mappings(self.graph)
+        for key in poss_maps:
+            if len(key) == 1:
+                a, = key
+                print(f'{a}      -> {poss_maps[key].union({self.zero})}')
             else:
-                carry = 0
-            i += 1
-            if i == len(self.mods):
-                i = 0
-                carry = 0
-
-    def get_val(self, i):
-        return self.nums[i]
+                a, b = key
+                print(f'{a}, {b} -> {poss_maps[key]}')
 
 
 def graph_from_edges(edges):
@@ -49,64 +50,37 @@ def possible_mappings(graph):
     for a in graph:
         for b in graph:
             if b not in redundant and b not in graph[a]:
-                edge = frozenset({a, b})
-                mappings[edge] = set()
+                product = frozenset({a, b})
+                mappings[product] = set()
                 hood = graph[a].union(graph[b])
                 for z in graph:
                     if hood.issubset(graph[z].union({z})):
-                        mappings[edge].add(z)
-                if len(mappings[edge]) == 0:
-                    print(edge)
+                        mappings[product].add(z)
+                if len(mappings[product]) == 0:
+                    print(product)
                     return None
 
         redundant.add(a)
 
     return mappings
+    
 
+def get_graph_semigroups(graph, zero=0):
+    # returns a set of all possible semigroups for the given
+    # zero divisor graph
+    g = groid(set(graph).union({zero}), commutative=True, zero=zero)
 
-def get_semigroup(graph, zero, squares_can_be_zero=True):
-    elements = list(graph)
-    elements.append(zero)
-    grpd = groupoid(elements)
-    grpd.set_zero(zero)
-
-    for node1, adj_set in graph.items():
-        for node2 in adj_set:
-            grpd.upd(node1, node2, zero)
+    for a, adj_set in graph.items():
+        for b in adj_set:
+            g.upd(a, b, zero)
 
     mappings = possible_mappings(graph)
 
-    if squares_can_be_zero:
+    if mappings:
         for key in mappings:
             if len(key) == 1:
                 mappings[key].add(zero)
 
-    num_possibilites = 1
-    keys = tuple(mappings)
-    mods = []
-    ordered_mappings = {}
-    for key in keys:
-        ordered_mappings[key] = tuple(mappings[key])
-        n = len(mappings[key])
-        mods.append(n)
-        num_possibilites *= n
-    counter = MixedCounter(mods)
-
-    print(num_possibilites)
-
-    for i in range(num_possibilites):
-        for i, key in enumerate(keys):
-            if len(key) == 2:
-                a, b = key
-            else:
-                [a] = key
-                b = a
-            c = ordered_mappings[key][counter.get_val(i)]
-            grpd.upd(a, b, c)
-
-        if is_assoc(grpd):
-            return grpd
-
-        counter.tick()
-
-    return None
+        return get_semigroups(mappings, g)
+    else:
+        return None

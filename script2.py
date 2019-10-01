@@ -1,6 +1,6 @@
 import time
 from zero_divisor_graph import (graph_from_edges,
-                                get_semigroup,
+                                get_semigroups,
                                 possible_mappings)
 from groupoid import print_caley_table
 
@@ -21,6 +21,9 @@ graph = graph_from_edges([
     ('y1', 'd1'),
     ('y2', 'd2'),
 ])
+
+maps = possible_mappings(graph)
+print(maps)
 
 start = time.time()
 s = get_semigroup(graph, 'z', squares_can_be_zero=False)

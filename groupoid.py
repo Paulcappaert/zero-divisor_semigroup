@@ -1,58 +1,101 @@
 class Groupoid():
-    # a set of elements over which there is a mapping from
-    # the cross product of the elements to the elements
-    def __init__(self, elements):
+    '''
+    An objec to represent a Groupoid
+    A set of elements with a mapping from the cross product to the elements
+    '''
+
+    def __init__(self, elements, commutative=False, zero=None):
         self.elements = frozenset(elements)
         self.map = {}
+        self.commutative = commutative
+        if zero is not None:
+            self.set_zero(zero)
+
+    def caley_table(self):
+        '''
+        returns: stirng of the caley table representation of the groupoid
+        raises: ValueError if groupoid mapping is incomplete
+        '''
+        ordered_elements = list(self.elements)
+        ordered_elements.sort()
+        ret_val = ''
+        for a in ordered_elements:
+            ret_val += f'{a}|\t'
+        ret_val += '\n'
+        for a in ordered_elements:
+            for b in ordered_elements:
+                product = self.get(a, b)
+                ret_val += f'{product},\t'
+            ret_val += '\n'
 
     def upd(self, a, b, result):
-        self.map[(a, b)] = result
+        '''
+        paramters: elements a, b and result such that a * b = result
+        raises: ValueError if a, b or result is not an element of the groupoid
+        '''
+        if {a, b, result}.issubset(self.elements):
+            if self.commutative:
+                self.map[frozenset({a, b})] = result
+            else:
+                self.map[(a, b)] = result
+        else:
+            raise ValueError(f"invalid elements {a}, {b}, {result}")
+
+    def has_map(self, a, b):
+        '''
+        parameters: a, b
+        returns: true if a * b is defined in the map
+        '''
+        if self.commutative:
+            return frozenset({a, b}) in self.map
+        else:
+            return (a, b) in self.map
 
     def get(self, a, b):
-        return self.map[(a, b)]
+        '''
+        parameters: a, b
+        returns: the mapping of a * b
+        raises: ValueError if a * b is not a defined mapping
+        '''
+        if self.commutative and frozenset({a, b}) in self.map:
+            return self.map[frozenset({a, b})]
+        elif not self.commutative and (a, b) in self.map:
+            return self.map[(a, b)]
+        else:
+            raise ValueError(f'invalid product {a}, {b}')
 
     def set_zero(self, zero):
-        for x in self.elements:
-            self.map[(zero, x)] = zero
-            self.map[(x, zero)] = zero
+        '''
+        parameters: zero, updates the mapping to make this the zero of the groupoid
+        raises: ValueError if zero is not in the groupoid
+        '''
+        if self.commutative:
+            for x in self.elements:
+                self.map[frozenset({zero, x})] = zero
+        else:
+            for x in self.elements:
+                self.map[(zero, x)] = zero
+                self.map[(x, zero)] = zero
+
+    def copy(self):
+        '''
+        returns: a copy of the semigroup with the same, elements and mapping
+        '''
+        g = Groupoid(self.elements, commutative=self.commutative)
+        g.map = self.map.copy()
+        return g
 
 
-class CommutativeGroupoid():
-
-    def __init__(self, elements):
-        self.elements = frozenset(elements)
-        self.map = {}
-
-    def upd(self, a, b, result):
-        self.map[frozenset({a, b})] = result
-
-    def get(self, a, b):
-        return self.map[frozenset({a, b})]
-
-    def set_zero(self, zero):
-        for x in self.elements:
-            self.map[frozenset({zero, x})] = zero
-
-
-def is_assoc(groupoid):
-    for a in groupoid.elements:
-        for b in groupoid.elements:
-            for c in groupoid.elements:
-                val1 = groupoid.get(groupoid.get(a, b), c)
-                val2 = groupoid.get(a, groupoid.get(b, c))
-                if not val1 == val2:
-                    return False
-    return True
-
-
-def print_caley_table(groupoid):
-    ordered_elements = list(groupoid.elements)
-    ordered_elements.sort()
-    for a in ordered_elements:
-        print(f'{a}|\t', end='')
-    print()
-    for a in ordered_elements:
-        for b in ordered_elements:
-            product = groupoid.get(a, b)
-            print(f'{product},\t', end='')
-        print()
+    def is_assoc(self):
+        '''
+        returns: true if the groupoid is associative
+        raises: ValueError if the mapping is incomplete
+        '''
+        for a in self.elements:
+            for b in self.elements:
+                for c in self.elements:
+                    val1 = self.get(self.get(a, b), c)
+                    val2 = self.get(a, self.get(b, c))
+                    if not val1 == val2:
+                        return False
+        return True
