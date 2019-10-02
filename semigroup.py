@@ -3,7 +3,7 @@ from mod_math import ModularCounter
 def get_assoc_products(groupoid):
     '''
     parameter: groupoid with incomplete mapping
-    returns: set of mappings that are implied if the groupoid is a semigroup
+    returns: dict of possible mappings that are implied if the groupoid is a semigroup
     '''
     pass
 

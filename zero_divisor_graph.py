@@ -9,23 +9,35 @@ class ZeroDivisorGraph():
         self.zero = zero
 
     def is_sufficient(self):
+        '''
+        returns: true if the graph meets the sufficient conditions to be a zero divisor graph
+        but still may not be a zero divisor graph
+        '''
         mappings = possible_mappings(self.graph)
         if mappings:
             return True
         return False
 
     def get_semigroups(self):
+        '''
+        returns: a list of Groupoid objects that match the zero divisor graph and are associative
+        '''
         return get_graph_semigroups(self.graph, zero=self.zero)
 
-    def print_poss_maps(self):
+    def poss_maps_string(self):
+        '''
+        returns: a string with the possible mappings of the semigroup implied by the graph
+        '''
         poss_maps = possible_mappings(self.graph)
+        ret_val = ''
         for key in poss_maps:
             if len(key) == 1:
                 a, = key
-                print(f'{a}      -> {poss_maps[key].union({self.zero})}')
+                ret_val += f'{a}      -> {poss_maps[key].union({self.zero})}\n'
             else:
                 a, b = key
-                print(f'{a}, {b} -> {poss_maps[key]}')
+                ret_val += f'{a}, {b} -> {poss_maps[key]}\n'
+        return ret_val
 
 
 def graph_from_edges(edges):
@@ -63,7 +75,7 @@ def possible_mappings(graph):
         redundant.add(a)
 
     return mappings
-    
+
 
 def get_graph_semigroups(graph, zero=0):
     # returns a set of all possible semigroups for the given

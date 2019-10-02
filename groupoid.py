@@ -27,6 +27,7 @@ class Groupoid():
                 product = self.get(a, b)
                 ret_val += f'{product},\t'
             ret_val += '\n'
+        return ret_val
 
     def upd(self, a, b, result):
         '''
