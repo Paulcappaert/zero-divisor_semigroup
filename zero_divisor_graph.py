@@ -39,6 +39,18 @@ class ZeroDivisorGraph():
                 ret_val += f'{a}, {b} -> {poss_maps[key]}\n'
         return ret_val
 
+    def num_poss_maps(self):
+        '''
+        returns: the number of possible semigroups implied by the graph
+        note: includes isomorphic semigroups
+        '''
+        poss_maps = possible_mappings(self.graph)
+        num = 1
+        for key in poss_maps:
+            num *= len(poss_maps[key])
+        return num
+
+
 
 def graph_from_edges(edges):
     graph = {}
