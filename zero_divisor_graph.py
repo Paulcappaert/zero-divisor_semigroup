@@ -8,16 +8,6 @@ class ZeroDivisorGraph():
         self.graph = graph_from_edges(edges)
         self.zero = zero
 
-    def is_sufficient(self):
-        '''
-        returns: true if the graph meets the sufficient conditions to be a zero divisor graph
-        but still may not be a zero divisor graph
-        '''
-        mappings = possible_mappings(self.graph)
-        if mappings:
-            return True
-        return False
-
     def get_semigroups(self):
         '''
         returns: a list of Groupoid objects that match the zero divisor graph and are associative
@@ -28,28 +18,34 @@ class ZeroDivisorGraph():
         '''
         returns: a string with the possible mappings of the semigroup implied by the graph
         '''
-        poss_maps = possible_mappings(self.graph)
+        sufficient, poss_maps = possible_mappings(self.graph)
         ret_val = ''
-        for key in poss_maps:
-            if len(key) == 1:
-                a, = key
-                ret_val += f'{a}      -> {poss_maps[key].union({self.zero})}\n'
-            else:
-                a, b = key
-                ret_val += f'{a}, {b} -> {poss_maps[key]}\n'
-        return ret_val
+        if sufficient:
+            for key in poss_maps:
+                if len(key) == 1:
+                    a, = key
+                    ret_val += f'{a}      -> {poss_maps[key].union({self.zero})}\n'
+                else:
+                    a, b = key
+                    ret_val += f'{a}, {b} -> {poss_maps[key]}\n'
+            return ret_val
+        else:
+            a, b = poss_maps['bad']
+            ret_val = f'bad product: {a}, {b}'
 
     def num_poss_maps(self):
         '''
         returns: the number of possible semigroups implied by the graph
         note: includes isomorphic semigroups
         '''
-        poss_maps = possible_mappings(self.graph)
-        num = 1
-        for key in poss_maps:
-            num *= len(poss_maps[key])
-        return num
-
+        sufficient, poss_maps = possible_mappings(self.graph)
+        if sufficient:
+            num = 1
+            for key in poss_maps:
+                num *= len(poss_maps[key])
+            return num
+        else:
+            return 0
 
 
 def graph_from_edges(edges):
@@ -69,6 +65,12 @@ def graph_from_edges(edges):
 
 
 def possible_mappings(graph):
+    '''
+    returns:
+        1. True if the graph is sufficient to be a zero divisor graph, false otherwise
+        2. Dict: The possible mappings if the graph is sufficient, otherwise,
+        a single key 'bad' with the insufficient product its item
+    '''
     mappings = {}
     redundant = set()
     for a in graph:
@@ -81,12 +83,11 @@ def possible_mappings(graph):
                     if hood.issubset(graph[z].union({z})):
                         mappings[product].add(z)
                 if len(mappings[product]) == 0:
-                    print(product)
-                    return None
+                    return False, product
 
         redundant.add(a)
 
-    return mappings
+    return True, mappings
 
 
 def get_graph_semigroups(graph, zero=0):
@@ -98,9 +99,9 @@ def get_graph_semigroups(graph, zero=0):
         for b in adj_set:
             g.upd(a, b, zero)
 
-    mappings = possible_mappings(graph)
+    sufficient, mappings = possible_mappings(graph)
 
-    if mappings:
+    if sufficient:
         for key in mappings:
             if len(key) == 1:
                 mappings[key].add(zero)
