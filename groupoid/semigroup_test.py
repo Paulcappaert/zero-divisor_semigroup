@@ -1,4 +1,3 @@
-from semigroup import ModularCounter as mc
 from semigroup import get_semigroups
 from groupoid import Groupoid as groid
 import unittest

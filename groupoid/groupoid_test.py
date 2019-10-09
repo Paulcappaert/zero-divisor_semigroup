@@ -20,6 +20,20 @@ class TestGroupoid(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.s.get('b', 'a')
 
+    def test_set_zero(self):
+        self.s.set_zero('a')
+        self.assertEqual(self.s.get('a','a'), 'a')
+        self.assertEqual(self.s.get('a','b'), 'a')
+        self.assertEqual(self.s.get('b','a'), 'a')
+        self.assertEqual(self.s.get('a','c'), 'a')
+        self.assertEqual(self.s.get('c','a'), 'a')
+
+    def test_is_assoc(self):
+        pass
+
+    def test_isnt_assoc(self):
+        pass
+
 
 class TestCommutativeGroupoid(unittest.TestCase):
 
@@ -40,6 +54,19 @@ class TestCommutativeGroupoid(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.assertEqual(self.s.get('a', 'b'), 'c')
 
+    def test_set_zero(self):
+        self.s.set_zero('a')
+        self.assertEqual(self.s.get('a','a'), 'a')
+        self.assertEqual(self.s.get('a','b'), 'a')
+        self.assertEqual(self.s.get('b','a'), 'a')
+        self.assertEqual(self.s.get('a','c'), 'a')
+        self.assertEqual(self.s.get('c','a'), 'a')
+
+    def test_is_assoc(self):
+        pass
+
+    def test_isnt_assoc(self):
+        pass
 
 if __name__ == '__main__':
     unittest.main()

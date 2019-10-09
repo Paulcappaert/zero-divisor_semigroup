@@ -1,5 +1,5 @@
 import unittest
-from mod_math import ModularCounter as mc
+from util.mod_math import ModularCounter as mc
 
 class TestModularCounter(unittest.TestCase):
 
@@ -39,7 +39,3 @@ class TestModularCounter(unittest.TestCase):
         self.assertEqual(self.ctr.get_count('a'), 1)
         self.assertEqual(self.ctr.get_count('b'), 0)
         self.assertEqual(self.ctr.get_count('c'), 0)
-
-
-if __name__ == '__main__':
-    unittest.main()

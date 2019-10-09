@@ -3,8 +3,6 @@ class ModularCounter():
     An object for counting every possible unique selection from a
     list of possible elements
     '''
-
-
     def __init__(self, mods, elements):
         self.mods = tuple(mods)
 

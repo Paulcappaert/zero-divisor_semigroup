@@ -1,8 +1,8 @@
-from mod_math import ModularCounter
+from groupoid.util.mod_math import ModularCounter
 
-def get_assoc_products(groupoid):
+def get_assoc_products(possible_mappings):
     '''
-    parameter: groupoid with incomplete mapping
+    parameter: dict of possible mappings for a groupoid
     returns: dict of possible mappings that are implied if the groupoid is a semigroup
     '''
     pass

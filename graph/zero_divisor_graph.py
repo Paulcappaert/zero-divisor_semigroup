@@ -1,52 +1,5 @@
-from groupoid import Groupoid as groid
-from semigroup import get_semigroups
-
-
-class ZeroDivisorGraph():
-
-    def __init__(self, *edges, zero=0):
-        self.graph = graph_from_edges(edges)
-        self.zero = zero
-
-    def get_semigroups(self):
-        '''
-        returns: a list of Groupoid objects that match the zero divisor graph and are associative
-        '''
-        return get_graph_semigroups(self.graph, zero=self.zero)
-
-    def poss_maps_string(self):
-        '''
-        returns: a string with the possible mappings of the semigroup implied by the graph
-        '''
-        sufficient, poss_maps = possible_mappings(self.graph)
-        ret_val = ''
-        if sufficient:
-            for key in poss_maps:
-                if len(key) == 1:
-                    a, = key
-                    ret_val += f'{a}      -> {poss_maps[key].union({self.zero})}\n'
-                else:
-                    a, b = key
-                    ret_val += f'{a}, {b} -> {poss_maps[key]}\n'
-            return ret_val
-        else:
-            a, b = poss_maps['bad']
-            ret_val = f'bad product: {a}, {b}'
-
-    def num_poss_maps(self):
-        '''
-        returns: the number of possible semigroups implied by the graph
-        note: includes isomorphic semigroups
-        '''
-        sufficient, poss_maps = possible_mappings(self.graph)
-        if sufficient:
-            num = 1
-            for key in poss_maps:
-                num *= len(poss_maps[key])
-            return num
-        else:
-            return 0
-
+from groupoid.semigroup import get_semigroups
+from groupoid.groupoid import Groupoid as groid
 
 def graph_from_edges(edges):
     graph = {}
@@ -88,6 +41,10 @@ def possible_mappings(graph):
         redundant.add(a)
 
     return True, mappings
+
+
+def get_assoc_mappings(graph):
+    pass
 
 
 def get_graph_semigroups(graph, zero=0):
