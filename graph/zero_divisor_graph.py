@@ -42,21 +42,20 @@ def possible_mappings(graph):
 
     return True, mappings
 
-
-def get_assoc_mappings(graph):
-    pass
-
-
 def get_graph_semigroups(graph, zero=0):
     # returns a set of all possible semigroups for the given
     # zero divisor graph
     g = groid(set(graph).union({zero}), commutative=True, zero=zero)
 
+    sufficient, mappings = possible_mappings(graph)
+
     for a, adj_set in graph.items():
         for b in adj_set:
             g.upd(a, b, zero)
+            mappings[frozenset({a, b})] = {zero}
 
-    sufficient, mappings = possible_mappings(graph)
+    for a in g.elements:
+        mappings[frozenset({a, zero})] = {zero}
 
     if sufficient:
         for key in mappings:

@@ -1,11 +1,46 @@
 from groupoid.util.mod_math import ModularCounter
 
-def get_assoc_products(possible_mappings):
+def inverse_set(a, b, pm, elements):
+    '''
+    returns: set of values z such that az = b is a possible mapping
+    '''
+    inv = set()
+    for z in elements:
+        if b in pm[frozenset({a, z})]:
+            inv.add(z)
+    return inv
+
+def get_assoc_maps(pm, elements):
     '''
     parameter: dict of possible mappings for a groupoid
-    returns: dict of possible mappings that are implied if the groupoid is a semigroup
+    returns: dict of possible associative mappings
+             None if there is no associative mappings
     '''
-    pass
+    for _ in range(len(pm)):
+        for a in elements:
+            for b in elements:
+                for c in elements:
+                    ab = pm[frozenset({a, b})]
+                    bc = pm[frozenset({b, c})]
+                    prod1 = set()
+                    for p in ab:
+                        prod1.update(pm[frozenset({p, c})])
+                    prod2 = set()
+                    for p in bc:
+                        prod2.update(pm[frozenset({p, a})])
+                    products = prod1.intersection(prod2)
+
+                    ab_vals = set()
+                    for p in products:
+                        ab_vals.update(inverse_set(c, p, pm, elements))
+
+                    bc_vals = set()
+                    for p in products:
+                        bc_vals.update(inverse_set(a, p, pm, elements))
+
+                    pm[frozenset({a, b})].intersection_update(ab_vals)
+                    pm[frozenset({b, c})].intersection_update(bc_vals)
+
 
 
 def get_semigroups(possible_mappings, groupoid):
@@ -16,6 +51,8 @@ def get_semigroups(possible_mappings, groupoid):
     returns: a list of groupoids copied from the passed groupoid and completed with
         mappings from the possible_mappings parameter
     '''
+    get_assoc_maps(possible_mappings, groupoid.elements)
+
     num_possibilites = 1
     mods = []
     ordered_mappings = {}
