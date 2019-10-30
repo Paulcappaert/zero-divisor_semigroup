@@ -1,33 +1,25 @@
-import time
-from zero_divisor_graph import (graph_from_edges,
-                                get_semigroups,
-                                possible_mappings)
-from groupoid import print_caley_table
+from zdg import ZeroDivisorGraph
 
-graph = graph_from_edges([
-    ('a', 'x1'),
-    ('a', 'x2'),
-    ('b', 'y1'),
-    ('b', 'y2'),
-    ('a', 'b'),
-    ('x1', 'y1'),
-    ('x1', 'y2'),
-    ('x2', 'y1'),
-    ('x2', 'y2'),
-    ('x1', 'x2'),
-    ('y1', 'y2'),
-    ('x1', 'c1'),
-    ('x2', 'c2'),
-    ('y1', 'd1'),
-    ('y2', 'd2'),
-])
+g = ZeroDivisorGraph(
+('a', 'b'),
+('a', 'x1'),
+('a', 'x2'),
+('b', 'y1'),
+('b', 'y2'),
+('x2', 'x1'),
+('y1', 'x1'),
+('y2', 'x1'),
+('y1', 'x2'),
+('y2', 'x2'),
+('y1', 'y2'),
+('c1', 'x1'),
+('c2', 'x2'),
+('d1', 'y1'),
+('d2', 'y2')
+)
 
-maps = possible_mappings(graph)
-print(maps)
+print(g.poss_maps_string())
+print(g.num_poss_maps())
 
-start = time.time()
-s = get_semigroup(graph, 'z', squares_can_be_zero=False)
-print_caley_table(s)
-end = time.time()
-minutes = (end - start) / 60
-print(minutes)
+semigroups = g.get_semigroups()
+print(len(semigroups))

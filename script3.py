@@ -1,4 +1,4 @@
-from zero_divisor_graph import ZeroDivisorGraph
+from zdg import ZeroDivisorGraph
 
 g = ZeroDivisorGraph(
 ('a1','x1'),
@@ -9,31 +9,52 @@ g = ZeroDivisorGraph(
 ('a3','y3'),
 ('a4','x4'),
 ('a4','y4'),
+('a5','x5'),
+('a5','y5'),
 ('x1','x2'),
 ('x1','x3'),
 ('x1','x4'),
+('x1','x5'),
 ('x2','x3'),
 ('x2','x4'),
+('x2','x5'),
 ('x3','x4'),
+('x3','x5'),
+('x4','x5'),
 ('x1','y2'),
 ('x1','y3'),
 ('x1','y4'),
+('x1','y5'),
 ('x2','y1'),
 ('x2','y3'),
 ('x2','y4'),
+('x2','y5'),
 ('x3','y1'),
 ('x3','y2'),
 ('x3','y4'),
+('x3','y5'),
 ('x4','y1'),
 ('x4','y2'),
 ('x4','y3'),
+('x4','y5'),
+('x5','y1'),
+('x5','y2'),
+('x5','y3'),
+('x5','y4'),
 ('y1','y2'),
 ('y1','y3'),
 ('y1','y4'),
+('y1','y5'),
 ('y2','y3'),
 ('y2','y4'),
-('y3','y4')
+('y2','y5'),
+('y3','y4'),
+('y3','y5'),
+('y4','y5'),
 )
 
 print(g.poss_maps_string())
 print(g.num_poss_maps())
+
+semigroups = g.get_semigroups()
+print(len(semigroups))

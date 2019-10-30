@@ -1,6 +1,10 @@
 from semigroup import get_semigroups
 from groupoid import Groupoid as groid
 import unittest
+import sys
+from util import mod_math
+
+sys.modules['groupoid.util.mod_math'] = mod_math
 
 
 class TestGetSemigroups(unittest.TestCase):
@@ -33,6 +37,8 @@ class TestGetSemigroups(unittest.TestCase):
         for s in semigroups:
             self.assertIn(s.get(1, 3), {1, 2, 3})
 
+class TestInverseSet(unittest.TestCase):
+    pass
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,6 +1,8 @@
 #M Mac
 .DS_Store
-/staticfiles/
+script1.py
+script2.py
+script3.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

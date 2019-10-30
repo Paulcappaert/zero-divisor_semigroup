@@ -1,16 +1,17 @@
 import time
-from zero_divisor_graph import ZeroDivisorGraph as ZDG
+from zdg import ZeroDivisorGraph as ZDG
 
 graph = ZDG(
-    ('a', 'b'),
-    ('a', 'c'),
-    ('b', 'e'),
-    ('b', 'd'),
-    ('c', 'e'),
-    ('c', 'd'),
-    ('f', 'e'),
-    ('g', 'd'),
-    ('d', 'e'),
+    (1, 2),
+    (2, 3),
+    (3, 1),
+    (1, 4),
+    (2, 5),
+    (3, 6),
+    (1, 7),
+    (2, 7),
+    (3, 8),
+    (7, 8)
 )
 
 start = time.time()

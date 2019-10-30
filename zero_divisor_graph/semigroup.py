@@ -66,8 +66,6 @@ def get_semigroups(possible_mappings, groupoid):
 
     counter = ModularCounter(mods, ordered_keys)
 
-    print(num_possibilites)
-
     semigroups = set()
     for i in range(num_possibilites):
 
