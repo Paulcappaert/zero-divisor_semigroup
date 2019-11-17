@@ -1,4 +1,4 @@
-from groupoid.util.mod_math import ModularCounter
+from .mod_math import ModularCounter
 
 def inverse_set(a, b, pm, elements):
     '''

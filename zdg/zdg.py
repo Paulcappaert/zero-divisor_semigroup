@@ -1,4 +1,4 @@
-from graph.zero_divisor_graph import (
+from .graph import (
     graph_from_edges,
     possible_mappings,
     get_graph_semigroups

@@ -1,8 +1,6 @@
-from unittest.mock import Mock, patch
 import unittest
-import sys
-sys.modules['groupoid.semigroup'] = Mock()
-sys.modules['groupoid.groupoid'] = Mock()
+
+
 
 from zero_divisor_graph import (possible_mappings,
                                 graph_from_edges,

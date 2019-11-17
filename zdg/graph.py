@@ -1,5 +1,5 @@
-from groupoid.semigroup import get_semigroups
-from groupoid.groupoid import Groupoid as groid
+from . import semigroup
+from .groupoid import Groupoid as groid
 
 def graph_from_edges(edges):
     graph = {}
@@ -62,6 +62,6 @@ def get_graph_semigroups(graph, zero=0):
             if len(key) == 1:
                 mappings[key].add(zero)
 
-        return get_semigroups(mappings, g)
+        return semigroup.get_semigroups(mappings, g)
     else:
         return None
