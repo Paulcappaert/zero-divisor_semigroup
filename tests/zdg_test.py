@@ -1,5 +1,5 @@
 import unittest
-from zdg import ZeroDivisorGraph as ZDG
+from zdg.zdg import ZeroDivisorGraph as ZDG
 
 class ZeroDivisorGraphTestCase(unittest.TestCase):
 

@@ -1,11 +1,7 @@
-from semigroup import get_semigroups
-from groupoid import Groupoid as groid
+from zdg.semigroup import get_semigroups
+from zdg.groupoid import Groupoid as groid
+from zdg.util import mod_math
 import unittest
-import sys
-from util import mod_math
-
-sys.modules['groupoid.util.mod_math'] = mod_math
-
 
 class TestGetSemigroups(unittest.TestCase):
 

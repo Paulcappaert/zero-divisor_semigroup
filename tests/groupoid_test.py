@@ -1,4 +1,4 @@
-from groupoid import Groupoid
+from zdg.groupoid import Groupoid
 import unittest
 
 

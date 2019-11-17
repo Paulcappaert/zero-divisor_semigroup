@@ -1,5 +1,5 @@
 import unittest
-from util.mod_math import ModularCounter as mc
+from zdg.util.mod_math import ModularCounter as mc
 
 class TestModularCounter(unittest.TestCase):
 

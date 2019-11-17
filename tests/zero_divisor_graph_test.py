@@ -1,8 +1,5 @@
 import unittest
-
-
-
-from zero_divisor_graph import (possible_mappings,
+from zdg.graph import (possible_mappings,
                                 graph_from_edges,
                                 get_graph_semigroups)
 
