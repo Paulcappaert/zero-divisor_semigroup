@@ -18,11 +18,12 @@ class Groupoid():
         '''
         ordered_elements = list(self.elements)
         ordered_elements.sort()
-        ret_val = ''
+        ret_val = '*|\t'
         for a in ordered_elements:
             ret_val += f'{a}|\t'
         ret_val += '\n'
         for a in ordered_elements:
+            ret_val += str(a) + '|\t'
             for b in ordered_elements:
                 product = self.get(a, b)
                 ret_val += f'{product},\t'
