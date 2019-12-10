@@ -1,10 +1,10 @@
 # zero-divisor_semigroup
 
-do the following on the command line
-> download or git clone https://github.com/Paulcappaert/zero-divisor_semigroup.git
+download the repository and do the following on the command line
 > cd zero-divisor_semigroup
 > python3
 
+To use the Zero Divisor Graph object
 >>from zdg.zdg import ZeroDivisorGraph as ZDG
 
 Define a zero divisor graph from edges
